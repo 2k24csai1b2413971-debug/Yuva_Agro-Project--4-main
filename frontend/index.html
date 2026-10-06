@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yuva Agro — Farm smarter with data</title>
+<meta name="description" content="Yuva Agro helps Indian farmers calculate water and fertilizer needs and detect crop disease early.">
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">
+      <span class="yuva">Yuva</span><span class="agro">Agro</span>
+      <span class="mark">युवा एग्रो</span>
+    </a>
+
+   <nav class="main-nav" id="mainNav">
+  <a href="index.html" class="active">Home</a>
+  <a href="water-calculator.html">Water Calculator</a>
+  <a href="fertilizer-calculator.html">Fertilizer Calculator</a>
+  <a href="disease-detection.html">Disease Detection</a>
+  <a href="chatbot.html">AI Chatbot</a>
+  <a href="kvk.html">KVK</a>
+
+  <div class="lang-toggle">
+    <button class="on">EN</button>
+    <button>हिं</button>
+  </div>
+</nav>
+
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div class="furrow"></div>
+
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+
+    <div>
+      <p class="eyebrow">Resource planning for the field</p>
+
+      <h1>
+        Know exactly<br>
+        what your <em>khet</em><br>
+        needs.
+      </h1>
+
+      <p class="lead">
+        Yuva Agro turns your crop, soil and land size into clear water and
+        fertilizer numbers — and checks your crop photos for early signs of disease.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="water-calculator.html" class="btn btn-primary">
+          Calculate Water Need
+        </a>
+
+        <a href="disease-detection.html" class="btn btn-outline">
+          Check a Crop Photo
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <svg class="sprout-badge"
+           viewBox="0 0 300 300"
+           fill="none"
+           xmlns="http://www.w3.org/2000/svg"
+           role="img"
+           aria-label="Illustration of a sprouting seed inside a stamped seal">
+
+        <circle cx="150" cy="150" r="128"
+                stroke="#E8A93B"
+                stroke-width="2"
+                stroke-dasharray="4 6"/>
+
+        <circle cx="150" cy="150" r="104"
+                stroke="#7BAE5C"
+                stroke-width="1.5"/>
+
+        <path d="M150 210 C150 150, 150 130, 150 95"
+              stroke="#F5EFE1"
+              stroke-width="4"
+              stroke-linecap="round"/>
+
+        <path d="M150 130 C120 130, 105 110, 100 80 C135 82, 150 100, 150 130Z"
+              fill="#7BAE5C"/>
+
+        <path d="M150 145 C180 145, 197 122, 202 92 C165 95, 150 115, 150 145Z"
+              fill="#E8A93B"/>
+
+        <ellipse cx="150" cy="215" rx="46" ry="10"
+                 fill="#6B4226"
+                 opacity="0.6"/>
+
+        <text x="150"
+              y="255"
+              text-anchor="middle"
+              font-family="IBM Plex Mono, monospace"
+              font-size="11"
+              fill="#F5EFE1"
+              letter-spacing="2">
+          EST. FOR FARMERS
+        </text>
+
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- TOOLS -->
+<section>
+  <div class="wrap">
+
+    <div class="section-head">
+      <p class="eyebrow">Three tools, one field visit</p>
+
+      <h2>Everything you need before you sow.</h2>
+
+      <p>
+        Pick a tool below. Each one asks a few simple questions and gives you
+        a clear number or answer — no jargon.
+      </p>
+    </div>
+
+
+    <div class="card-grid">
+
+      <div class="seed-card">
+        <div class="stamp">WATER<br>CALC</div>
+
+        <span class="tag">Irrigation</span>
+
+        <h3>Water Calculator</h3>
+
+        <p>
+          Enter your crop, land size and soil type to get a daily and seasonal
+          water requirement.
+        </p>
+
+        <a href="water-calculator.html"
+           class="btn btn-outline-dark btn-block">
+          Open Calculator
+        </a>
+      </div>
+
+
+      <div class="seed-card">
+        <div class="stamp">NPK<br>CALC</div>
+
+        <span class="tag">Fertilizer</span>
+
+        <h3>Fertilizer Calculator</h3>
+
+        <p>
+          Get a Nitrogen–Phosphorus–Potassium recommendation matched to your
+          crop and soil.
+        </p>
+
+        <a href="fertilizer-calculator.html"
+           class="btn btn-outline-dark btn-block">
+          Open Calculator
+        </a>
+      </div>
+
+
+      <div class="seed-card">
+        <div class="stamp">SCAN<br>LEAF</div>
+
+        <span class="tag">Disease Detection</span>
+
+        <h3>Crop Disease Check</h3>
+
+        <p>
+          Upload or capture a photo of an affected leaf and get a quick first
+          read on what might be wrong.
+        </p>
+
+        <a href="disease-detection.html"
+           class="btn btn-outline-dark btn-block">
+          Check a Photo
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section style="background:var(--bg-alt);">
+
+  <div class="wrap">
+
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Three steps, every time.</h2>
+    </div>
+
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="num">01</div>
+
+        <h4>Tell us your field</h4>
+
+        <p>
+          Crop, land size, soil type and region — takes under a minute.
+        </p>
+      </div>
+
+
+      <div class="step">
+        <div class="num">02</div>
+
+        <h4>Get a clear number</h4>
+
+        <p>
+          We calculate a recommendation using standard agronomy data for your inputs.
+        </p>
+      </div>
+
+
+      <div class="step">
+        <div class="num">03</div>
+
+        <h4>Act on it</h4>
+
+        <p>
+          Use the recommendation to plan irrigation, fertilizer dosing,
+          or your next step with disease.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FIELD REPORT / TRUST -->
+<section>
+
+  <div class="wrap">
+
+    <div class="section-head">
+      <p class="eyebrow">Field report</p>
+      <h2>Built around real farm numbers.</h2>
+    </div>
+
+
+    <div class="ledger">
+
+      <div class="ledger-row">
+        <span class="label">Crops covered at launch</span>
+        <span class="value">12</span>
+      </div>
+
+      <div class="ledger-row">
+        <span class="label">Soil types supported</span>
+        <span class="value">6</span>
+      </div>
+
+      <div class="ledger-row">
+        <span class="label">
+          Languages (English / Hindi, more coming)
+        </span>
+        <span class="value">2</span>
+      </div>
+
+      <div class="ledger-row">
+        <span class="label">Works on</span>
+        <span class="value">Any phone browser</span>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FARMER REGISTRATION -->
+<section>
+
+  <div class="wrap">
+
+    <div class="section-head">
+
+      <p class="eyebrow">Farmer Registration</p>
+
+      <h2>Register a Farmer</h2>
+
+      <p>
+        Enter farmer details to save them in MongoDB.
+      </p>
+
+    </div>
+
+
+    <form id="farmerForm">
+
+      <div class="field">
+        <label for="farmerName">Name</label>
+        <input type="text" id="farmerName" required>
+      </div>
+
+
+      <div class="field">
+        <label for="farmerVillage">Village</label>
+        <input type="text" id="farmerVillage">
+      </div>
+
+
+      <div class="field">
+        <label for="farmerCrop">Crop</label>
+        <input type="text" id="farmerCrop">
+      </div>
+
+
+      <div class="field">
+        <label for="farmerPhone">Phone</label>
+        <input type="text" id="farmerPhone" required>
+      </div>
+
+
+      <button type="submit" class="btn btn-primary">
+        Register Farmer
+      </button>
+
+
+      <p id="farmerMessage"></p>
+
+    </form>
+
+
+    <div class="section-head" style="margin-top:2.5rem;">
+      <h3>Registered Farmers</h3>
+      <p>Live from MongoDB.</p>
+    </div>
+
+    <div id="farmerList">
+      <p>Loading farmers...</p>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+  <div class="wrap">
+
+    <div>
+      <div class="foot-brand">Yuva Agro</div>
+
+      <p style="max-width:32ch; font-size:0.88rem;">
+        Data-backed farming tools for Indian growers.
+      </p>
+    </div>
+
+
+    <div class="foot-cols">
+
+      <div>
+
+        <h5>Tools</h5>
+
+        <ul>
+          <li>
+            <a href="water-calculator.html">
+              Water Calculator
+            </a>
+          </li>
+
+          <li>
+            <a href="fertilizer-calculator.html">
+              Fertilizer Calculator
+            </a>
+          </li>
+
+          <li>
+            <a href="disease-detection.html">
+              Disease Detection
+            </a>
+          </li>
+
+          <li>
+            <a href="chatbot.html">
+              AI Chatbot
+            </a>
+          </li>
+          <li>
+            <a href="kvk.html">
+              KVK
+            </a>
+         </li>
+        </ul>
+
+      </div>
+
+
+      <div>
+
+        <h5>About</h5>
+
+        <ul>
+          <li><a href="#">Our Mission</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="wrap foot-bottom">
+    © 2026 Yuva Agro. Built for the field.
+  </div>
+
+</footer>
+
+
+<!-- EXISTING JAVASCRIPT -->
+<script src="script.js"></script>
+
+
+<!-- FARMER LIST + REGISTRATION -->
+<script>
+
+const farmerListEl = document.getElementById("farmerList");
+const farmerForm = document.getElementById("farmerForm");
+const farmerMessageEl = document.getElementById("farmerMessage");
+
+
+// Fetch farmers from the backend and render them onto the page.
+async function loadFarmers() {
+
+  if (!farmerListEl) return;
+
+  farmerListEl.innerHTML = "<p>Loading farmers...</p>";
+
+  try {
+
+    const response = await fetch("/api/farmers");
+    const farmers = await response.json();
+
+    if (!response.ok) {
+      throw new Error(farmers.message || "Could not load farmers");
+    }
+
+    renderFarmers(farmers);
+
+  } catch (error) {
+
+    farmerListEl.innerHTML =
+      "<p>Could not load farmers: " + error.message + "</p>";
+
+    console.error("Error fetching farmers:", error);
+
+  }
+
+}
+
+
+function renderFarmers(farmers) {
+
+  if (!Array.isArray(farmers) || farmers.length === 0) {
+    farmerListEl.innerHTML =
+      "<p>No farmers registered yet. Add the first one above.</p>";
+    return;
+  }
+
+  const rows = farmers.map(function (f) {
+    return "<tr>" +
+      "<td>" + escapeHtml(f.name) + "</td>" +
+      "<td>" + escapeHtml(f.village) + "</td>" +
+      "<td>" + escapeHtml(f.crop) + "</td>" +
+      "<td>" + escapeHtml(f.phone) + "</td>" +
+      "</tr>";
+  }).join("");
+
+  farmerListEl.innerHTML =
+    "<table class=\"farmer-table\">" +
+      "<thead><tr>" +
+        "<th>Name</th><th>Village</th><th>Crop</th><th>Phone</th>" +
+      "</tr></thead>" +
+      "<tbody>" + rows + "</tbody>" +
+    "</table>";
+
+}
+
+
+// Escape user-supplied text before putting it into HTML, so a farmer name
+// containing "<script>" can never execute. This is XSS protection.
+function escapeHtml(value) {
+  if (value === undefined || value === null) return "\u2014";
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+
+// Register a new farmer, then refresh the list so the new row appears.
+if (farmerForm) {
+
+  farmerForm.addEventListener("submit", async function (e) {
+
+    e.preventDefault();
+
+    const submitBtn = farmerForm.querySelector("button[type=submit]");
+
+    const farmerData = {
+      name:    document.getElementById("farmerName").value.trim(),
+      village: document.getElementById("farmerVillage").value.trim(),
+      crop:    document.getElementById("farmerCrop").value.trim(),
+      phone:   document.getElementById("farmerPhone").value.trim()
+    };
+
+    submitBtn.disabled = true;
+    farmerMessageEl.textContent = "Saving...";
+
+    try {
+
+      const response = await fetch("/api/farmers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(farmerData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      farmerMessageEl.textContent = "Farmer registered successfully!";
+      farmerForm.reset();
+
+      await loadFarmers();
+
+    } catch (error) {
+
+      farmerMessageEl.textContent = "Error: " + error.message;
+      console.error("Error registering farmer:", error);
+
+    } finally {
+
+      submitBtn.disabled = false;
+
+    }
+
+  });
+
+}
+
+
+loadFarmers();
+
+</script>
+
+</body>
+</html>

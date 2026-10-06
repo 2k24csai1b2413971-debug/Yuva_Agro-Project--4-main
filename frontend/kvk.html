@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Yuva Agro — Find a KVK</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="wrap">
+
+        <a href="index.html" class="logo">
+            <span class="yuva">Yuva</span><span class="agro">Agro</span>
+            <span class="mark">युवा एग्रो</span>
+        </a>
+
+        <nav class="main-nav" id="mainNav">
+            <a href="index.html">Home</a>
+            <a href="water-calculator.html">Water Calculator</a>
+            <a href="fertilizer-calculator.html">Fertilizer Calculator</a>
+            <a href="disease-detection.html">Disease Detection</a>
+            <a href="chatbot.html">AI Chatbot</a>
+            <a href="kvk.html" class="active">KVK</a>
+
+            <div class="lang-toggle">
+                <button class="on">EN</button>
+                <button>हिं</button>
+            </div>
+        </nav>
+
+        <button class="nav-toggle"
+                aria-label="Toggle menu"
+                aria-expanded="false">
+            ☰
+        </button>
+
+    </div>
+</header>
+
+<div class="furrow"></div>
+
+
+<!-- KVK HERO -->
+<section class="hero">
+    <div class="wrap">
+
+        <div>
+
+            <p class="eyebrow">Agricultural Advisory</p>
+
+            <h1>
+                Find your nearest
+                <em>KVK.</em>
+            </h1>
+
+            <p class="lead">
+                Find a Krishi Vigyan Kendra and get access to agricultural
+                experts, location details and official information.
+            </p>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- KVK SEARCH -->
+<section>
+
+    <div class="wrap">
+
+        <div class="section-head">
+
+            <p class="eyebrow">Find a KVK</p>
+
+            <h2>Choose your location.</h2>
+
+            <p>
+                Select a state and district to find the available
+                Krishi Vigyan Kendras.
+            </p>
+
+        </div>
+
+
+        <div class="card-grid">
+
+            <div class="seed-card">
+
+                <span class="tag">Search</span>
+
+                <h3>Find KVK</h3>
+
+                <div class="field">
+
+                    <label for="stateSelect">
+                        State
+                    </label>
+
+                    <select id="stateSelect">
+                        <option value="">
+                            Select State
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="districtSelect">
+                        District
+                    </label>
+
+                    <select id="districtSelect" disabled>
+
+                        <option value="">
+                            Select District
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    id="findBtn"
+                    class="btn btn-primary btn-block"
+                    type="button"
+                    disabled>
+
+                    Find KVK
+
+                </button>
+
+                <p id="message"></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- RESULTS -->
+<section style="background:var(--bg-alt);">
+
+    <div class="wrap">
+
+        <div class="section-head">
+
+            <p class="eyebrow">
+                KVK Directory
+            </p>
+
+            <h2>
+                Agricultural centres near you.
+            </h2>
+
+        </div>
+
+
+        <div id="results">
+
+            <p>
+                Select a state and district to find a KVK.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+    <div class="wrap">
+
+        <div>
+
+            <div class="foot-brand">
+                Yuva Agro
+            </div>
+
+            <p style="max-width:32ch; font-size:0.88rem;">
+                Data-backed farming tools for Indian growers.
+            </p>
+
+        </div>
+
+
+        <div class="foot-cols">
+
+            <div>
+
+                <h5>Tools</h5>
+
+                <ul>
+
+                    <li>
+                        <a href="water-calculator.html">
+                            Water Calculator
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="fertilizer-calculator.html">
+                            Fertilizer Calculator
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="disease-detection.html">
+                            Disease Detection
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="chatbot.html">
+                            AI Chatbot
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="kvk.html">
+                            KVK
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <div>
+
+                <h5>About</h5>
+
+                <ul>
+
+                    <li>
+                        <a href="#">
+                            Our Mission
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            Contact
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="wrap foot-bottom">
+
+        © 2026 Yuva Agro. Built for the field.
+
+    </div>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+const stateSelect =
+    document.getElementById("stateSelect");
+
+const districtSelect =
+    document.getElementById("districtSelect");
+
+const findBtn =
+    document.getElementById("findBtn");
+
+const results =
+    document.getElementById("results");
+
+const message =
+    document.getElementById("message");
+
+
+let allKVKs = [];
+
+
+/* Load all KVKs */
+
+async function loadKVKs() {
+
+    try {
+
+        const response =
+            await fetch("/api/kvks");
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load KVK data"
+            );
+
+        }
+
+        allKVKs =
+            await response.json();
+
+
+        populateStates();
+
+    } catch (error) {
+
+        message.textContent =
+            "Could not load KVK data.";
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* Populate states */
+
+function populateStates() {
+
+    const states =
+        [...new Set(
+            allKVKs.map(kvk => kvk.state)
+        )].sort();
+
+
+    states.forEach(state => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = state;
+
+        option.textContent = state;
+
+        stateSelect.appendChild(option);
+
+    });
+
+}
+
+
+/* State changed */
+
+stateSelect.addEventListener(
+    "change",
+    function () {
+
+        districtSelect.innerHTML =
+            '<option value="">Select District</option>';
+
+        districtSelect.disabled = true;
+
+        findBtn.disabled = true;
+
+        results.innerHTML =
+            "<p>Select a district to find a KVK.</p>";
+
+
+        const selectedState =
+            stateSelect.value;
+
+        if (!selectedState) {
+
+            return;
+
+        }
+
+
+        const districts =
+            [...new Set(
+                allKVKs
+                    .filter(
+                        kvk =>
+                            kvk.state === selectedState
+                    )
+                    .map(
+                        kvk =>
+                            kvk.district
+                    )
+            )].sort();
+
+
+        districts.forEach(district => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = district;
+
+            option.textContent = district;
+
+            districtSelect.appendChild(option);
+
+        });
+
+
+        districtSelect.disabled = false;
+
+    }
+);
+
+
+/* District changed */
+
+districtSelect.addEventListener(
+    "change",
+    function () {
+
+        findBtn.disabled =
+            !districtSelect.value;
+
+    }
+);
+
+
+/* Find KVK */
+
+findBtn.addEventListener(
+    "click",
+    function () {
+
+        const state =
+            stateSelect.value;
+
+        const district =
+            districtSelect.value;
+
+
+        const matchingKVKs =
+            allKVKs.filter(
+                kvk =>
+                    kvk.state === state &&
+                    kvk.district === district
+            );
+
+
+        renderKVKs(matchingKVKs);
+
+    }
+);
+
+
+/* Display KVK cards */
+
+function renderKVKs(kvks) {
+
+    if (!kvks.length) {
+
+        results.innerHTML =
+            "<p>No KVK found for this location.</p>";
+
+        return;
+
+    }
+
+
+    results.innerHTML =
+        kvks.map(kvk => `
+
+            <div class="seed-card"
+                 style="margin-bottom:1.5rem;">
+
+                <span class="tag">
+                    ${escapeHtml(kvk.state)}
+                </span>
+
+                <h3>
+                    ${escapeHtml(kvk.name)}
+                </h3>
+
+                <p>
+                    <strong>District:</strong>
+                    ${escapeHtml(kvk.district)}
+                </p>
+
+                <p>
+                    <strong>Address:</strong>
+                    ${escapeHtml(kvk.address)}
+                </p>
+
+                <p>
+                    <strong>Host Organization:</strong>
+                    ${escapeHtml(kvk.hostOrganization)}
+                </p>
+
+                <p>
+                    <strong>Year of Sanction:</strong>
+                    ${kvk.yearOfSanction || "—"}
+                </p>
+
+                <a
+                    href="${escapeAttribute(kvk.officialSource)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-outline-dark">
+
+                    Official ICAR Source
+
+                </a>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* Security helpers */
+
+function escapeHtml(value) {
+
+    if (
+        value === undefined ||
+        value === null
+    ) {
+        return "—";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+}
+
+
+function escapeAttribute(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
+/* Start */
+
+loadKVKs();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Calculator — Yuva Agro</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">
+      <span class="yuva">Yuva</span><span class="agro">Agro</span>
+      <span class="mark">युवा एग्रो</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="water-calculator.html" class="active">Water Calculator</a>
+      <a href="fertilizer-calculator.html">Fertilizer Calculator</a>
+      <a href="disease-detection.html">Disease Detection</a>
+      <a href="chatbot.html">AI Chatbot</a>
+      <div class="lang-toggle">
+        <button class="on">EN</button>
+        <button>हिं</button>
+      </div>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div class="furrow"></div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Irrigation</p>
+      <h2>Water Calculator</h2>
+      <p>Fill in your field details. We'll estimate your daily and seasonal water requirement.</p>
+    </div>
+
+    <div class="calc-shell">
+      <!-- FORM -->
+      <form id="waterForm">
+        <div class="field">
+          <label for="crop">Crop</label>
+          <select id="crop" required>
+            <option value="">Select crop</option>
+            <option value="rice" data-kc="1.15" data-days="120">Rice / Paddy</option>
+            <option value="wheat" data-kc="0.75" data-days="140">Wheat</option>
+            <option value="sugarcane" data-kc="1.25" data-days="330">Sugarcane</option>
+            <option value="cotton" data-kc="0.9" data-days="180">Cotton</option>
+            <option value="maize" data-kc="0.8" data-days="110">Maize</option>
+            <option value="groundnut" data-kc="0.7" data-days="120">Groundnut</option>
+            <option value="soybean" data-kc="0.75" data-days="100">Soybean</option>
+            <option value="tomato" data-kc="0.85" data-days="100">Tomato</option>
+            <option value="onion" data-kc="0.9" data-days="120">Onion</option>
+            <option value="chickpea" data-kc="0.6" data-days="100">Chickpea / Chana</option>
+            <option value="mustard" data-kc="0.65" data-days="110">Mustard</option>
+            <option value="potato" data-kc="0.8" data-days="100">Potato</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="area">Land area</label>
+          <input type="number" id="area" min="0.1" step="0.1" placeholder="e.g. 2" required>
+          <span class="hint">In acres</span>
+        </div>
+
+        <div class="field">
+          <label for="soil">Soil type</label>
+          <select id="soil" required>
+            <option value="">Select soil type</option>
+            <option value="sandy" data-factor="1.25">Sandy — drains fast, needs more frequent water</option>
+            <option value="loamy" data-factor="1.0">Loamy — balanced, standard baseline</option>
+            <option value="clay" data-factor="0.85">Clay — holds water longer, needs less</option>
+            <option value="black" data-factor="0.9">Black soil (regur)</option>
+            <option value="red" data-factor="1.1">Red soil</option>
+            <option value="alluvial" data-factor="1.0">Alluvial soil</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Climate right now</label>
+          <div class="chip-group" id="climateChips">
+            <button type="button" class="chip selected" data-factor="1.0">Normal</button>
+            <button type="button" class="chip" data-factor="1.2">Hot / dry spell</button>
+            <button type="button" class="chip" data-factor="0.8">Cool / cloudy</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Calculate Water Need</button>
+      </form>
+
+      <!-- RESULT -->
+      <div class="result-panel">
+        <div id="resultEmpty" class="result-empty">
+          <span class="icon">💧</span>
+          Fill in the form to see your water recommendation here.
+        </div>
+
+        <div id="resultCard" class="seed-card" style="display:none;">
+          <div class="stamp">WATER<br>CALC</div>
+          <span class="tag" id="resultCropTag">CROP</span>
+          <h3>Recommended Water Use</h3>
+
+          <div class="result-value" id="dailyValue">0<span class="unit">litres/day</span></div>
+          <p style="margin-top:6px;">for your full plot, based on today's inputs</p>
+
+          <div class="divider-dash"></div>
+
+          <div class="ledger" style="border:none; background:transparent;">
+            <div class="ledger-row" style="padding-left:0; padding-right:0;">
+              <span class="label">Per acre / day</span>
+              <span class="value" id="perAcreValue">—</span>
+            </div>
+            <div class="ledger-row" style="padding-left:0; padding-right:0;">
+              <span class="label">Estimated season total</span>
+              <span class="value" id="seasonValue">—</span>
+            </div>
+            <div class="ledger-row" style="padding-left:0; padding-right:0;">
+              <span class="label">Crop duration</span>
+              <span class="value" id="durationValue">—</span>
+            </div>
+          </div>
+
+          <div class="divider-dash"></div>
+          <p style="font-size:0.82rem;">Tip: split this into 2–3 waterings a week rather than one large dose — it reduces runoff and helps root uptake.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <div class="foot-brand">Yuva Agro</div>
+      <p style="max-width:32ch; font-size:0.88rem;">Data-backed farming tools for Indian growers.</p>
+    </div>
+    <div class="foot-cols">
+      <div>
+        <h5>Tools</h5>
+        <ul>
+          <li><a href="water-calculator.html">Water Calculator</a></li>
+          <li><a href="fertilizer-calculator.html">Fertilizer Calculator</a></li>
+          <li><a href="disease-detection.html">Disease Detection</a></li>
+          <li><a href="chatbot.html">AI Chatbot</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">© 2026 Yuva Agro. Built for the field.</div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // Climate chip selection
+  const chips = document.querySelectorAll('#climateChips .chip');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+  });
+
+  const form = document.getElementById('waterForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const cropSelect = document.getElementById('crop');
+    const cropOpt = cropSelect.options[cropSelect.selectedIndex];
+    const kc = parseFloat(cropOpt.dataset.kc);
+    const days = parseInt(cropOpt.dataset.days, 10);
+    const cropName = cropOpt.text;
+
+    const area = parseFloat(document.getElementById('area').value); // acres
+
+    const soilSelect = document.getElementById('soil');
+    const soilFactor = parseFloat(soilSelect.options[soilSelect.selectedIndex].dataset.factor);
+
+    const climateFactor = parseFloat(document.querySelector('#climateChips .chip.selected').dataset.factor);
+
+    // Simplified reference-evapotranspiration style estimate.
+    // Baseline ET0 assumed ~5 mm/day for demo purposes — replace with
+    // real regional weather-station data in production.
+    const ET0_MM_PER_DAY = 5;
+    const mmPerDayPerAcre = ET0_MM_PER_DAY * kc * soilFactor * climateFactor;
+
+    // 1 acre = 4046.86 sq m. 1 mm depth over 1 sq m = 1 litre.
+    const litresPerAcrePerDay = mmPerDayPerAcre * 4046.86;
+    const totalLitresPerDay = litresPerAcrePerDay * area;
+    const seasonTotal = totalLitresPerDay * days;
+
+    document.getElementById('resultCropTag').textContent = cropName.toUpperCase();
+    document.getElementById('dailyValue').innerHTML =
+      Math.round(totalLitresPerDay).toLocaleString('en-IN') + '<span class="unit">litres/day</span>';
+    document.getElementById('perAcreValue').textContent =
+      Math.round(litresPerAcrePerDay).toLocaleString('en-IN') + ' L';
+    document.getElementById('seasonValue').textContent =
+      (seasonTotal / 1000).toLocaleString('en-IN', {maximumFractionDigits: 1}) + ' kL';
+    document.getElementById('durationValue').textContent = days + ' days';
+
+    document.getElementById('resultEmpty').style.display = 'none';
+    document.getElementById('resultCard').style.display = 'block';
+    document.getElementById('resultCard').scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+</script>
+</body>
+</html>

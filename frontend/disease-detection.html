@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disease Detection — Yuva Agro</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">
+      <span class="yuva">Yuva</span><span class="agro">Agro</span>
+      <span class="mark">युवा एग्रो</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="water-calculator.html">Water Calculator</a>
+      <a href="fertilizer-calculator.html">Fertilizer Calculator</a>
+      <a href="disease-detection.html" class="active">Disease Detection</a>
+      <a href="chatbot.html">AI Chatbot</a>
+      <div class="lang-toggle">
+        <button class="on">EN</button>
+        <button>हिं</button>
+      </div>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div class="furrow"></div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Crop health</p>
+      <h2>Disease Detection</h2>
+      <p>Upload or capture a clear photo of the affected leaf, stem, or fruit. We'll give you a first read on what might be going on.</p>
+    </div>
+
+    <div id="errorNotice" class="notice" style="display:none; background:#FCE8E6; border-color:var(--rust); color:var(--rust); margin-bottom:20px;">
+      <strong>Error:</strong> <span id="errorMessage"></span>
+    </div>
+
+    <div class="calc-shell">
+      <!-- UPLOAD -->
+      <div>
+        <div id="uploadBox" class="upload-box">
+          <div class="icon">📷</div>
+          <p style="font-weight:700; margin-bottom:6px;">Drop a photo here, or</p>
+          <label for="fileInput" class="btn btn-outline-dark" style="display:inline-flex; margin-top:6px;">Choose Photo</label>
+          <input type="file" id="fileInput" accept="image/*" capture="environment">
+          <p class="hint" style="margin-top:14px; color:var(--ink-soft);">Best results: close-up, good daylight, one leaf in focus.</p>
+        </div>
+
+        <div id="previewSection" style="display:none; margin-top:20px;">
+          <div class="preview-wrap">
+            <img id="previewImg" src="" alt="Uploaded crop photo preview">
+          </div>
+          <div style="display:flex; gap:12px;">
+            <button id="analyzeBtn" class="btn btn-primary btn-block">Analyze Photo</button>
+            <button id="resetBtn" class="btn btn-outline-dark">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULT -->
+      <div class="result-panel">
+        <div id="resultEmpty" class="result-empty">
+          <span class="icon">🔍</span>
+          Upload a photo to see the diagnosis here.
+        </div>
+
+        <div id="analyzingCard" class="seed-card" style="display:none; text-align:center;">
+          <div class="stamp">SCAN<br>LEAF</div>
+          <h3 style="padding-right:0;">Analyzing photo…</h3>
+          <p>Checking against known disease patterns with AI.</p>
+          <div class="spinner" style="border-top-color: var(--field-green); border-color: rgba(31,58,46,0.2); margin-top:6px;"></div>
+        </div>
+
+        <div id="resultCard" class="seed-card diagnosis-card" style="display:none;">
+          <div class="stamp">SCAN<br>LEAF</div>
+          <span class="tag">Disease Detection</span>
+          <span class="status warn" id="statusBadge">⚠ Possible issue found</span>
+          <h3 id="diagnosisTitle" style="padding-right:0;">—</h3>
+          <p id="diagnosisDesc">—</p>
+
+          <div class="divider-dash"></div>
+
+          <div class="ledger" style="border:none; background:transparent;">
+            <div class="ledger-row" style="padding-left:0; padding-right:0;">
+              <span class="label">Confidence</span>
+              <span class="value" id="confidenceValue">—</span>
+            </div>
+          </div>
+
+          <div class="divider-dash"></div>
+          <p style="font-size:0.82rem;"><strong>Suggested next step:</strong> <span id="nextStep">—</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <div class="foot-brand">Yuva Agro</div>
+      <p style="max-width:32ch; font-size:0.88rem;">Data-backed farming tools for Indian growers.</p>
+    </div>
+    <div class="foot-cols">
+      <div>
+        <h5>Tools</h5>
+        <ul>
+          <li><a href="water-calculator.html">Water Calculator</a></li>
+          <li><a href="fertilizer-calculator.html">Fertilizer Calculator</a></li>
+          <li><a href="disease-detection.html">Disease Detection</a></li>
+          <li><a href="chatbot.html">AI Chatbot</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">© 2026 Yuva Agro. Built for the field.</div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  const uploadBox = document.getElementById('uploadBox');
+  const fileInput = document.getElementById('fileInput');
+  const previewSection = document.getElementById('previewSection');
+  const previewImg = document.getElementById('previewImg');
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  const resultEmpty = document.getElementById('resultEmpty');
+  const analyzingCard = document.getElementById('analyzingCard');
+  const resultCard = document.getElementById('resultCard');
+
+  const errorNotice = document.getElementById('errorNotice');
+  const errorMessage = document.getElementById('errorMessage');
+
+  let currentFile = null;
+
+  function showError(msg) {
+    if (errorMessage && errorNotice) {
+      errorMessage.textContent = msg;
+      errorNotice.style.display = 'block';
+    }
+  }
+
+  function hideError() {
+    if (errorNotice) {
+      errorNotice.style.display = 'none';
+    }
+  }
+
+  function showPreview(file) {
+    currentFile = file;
+    hideError();
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImg.src = e.target.result;
+      previewSection.style.display = 'block';
+      uploadBox.style.display = 'none';
+      resultEmpty.style.display = 'none';
+      analyzingCard.style.display = 'none';
+      resultCard.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files && fileInput.files[0]) showPreview(fileInput.files[0]);
+  });
+
+  // Drag and drop support
+  ['dragover', 'dragleave', 'drop'].forEach(evt => {
+    uploadBox.addEventListener(evt, (e) => e.preventDefault());
+  });
+  uploadBox.addEventListener('dragover', () => uploadBox.classList.add('dragover'));
+  uploadBox.addEventListener('dragleave', () => uploadBox.classList.remove('dragover'));
+  uploadBox.addEventListener('drop', (e) => {
+    uploadBox.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      fileInput.files = e.dataTransfer.files;
+      showPreview(file);
+    }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    currentFile = null;
+    fileInput.value = '';
+    previewSection.style.display = 'none';
+    uploadBox.style.display = 'block';
+    resultEmpty.style.display = 'block';
+    analyzingCard.style.display = 'none';
+    resultCard.style.display = 'none';
+    hideError();
+  });
+
+  analyzeBtn.addEventListener('click', () => analyzePhoto());
+
+  async function analyzePhoto() {
+    const file = currentFile || (fileInput.files && fileInput.files[0]);
+    if (!file) {
+      showError('Please choose or drop a photo of the affected plant leaf first.');
+      return;
+    }
+
+    // Client-side validations
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      showError('Invalid file format. Please upload a JPEG, PNG, or WebP photo.');
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showError('File size (' + (file.size / (1024 * 1024)).toFixed(1) + 'MB) exceeds the 5MB limit.');
+      return;
+    }
+
+    hideError();
+    resultEmpty.style.display = 'none';
+    resultCard.style.display = 'none';
+    analyzingCard.style.display = 'block';
+    analyzeBtn.disabled = true;
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Call Express backend endpoint
+      const response = await fetch('/api/disease/detect', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || data.message || ('Server error: ' + response.status));
+      }
+
+      // Populate UI with response conforming to contract { label, confidence, description, nextStep }
+      document.getElementById('diagnosisTitle').textContent = data.label || 'Diagnosis Complete';
+      document.getElementById('diagnosisDesc').textContent = data.description || '';
+      document.getElementById('confidenceValue').textContent = (typeof data.confidence === 'number' ? data.confidence : 0) + '%';
+      document.getElementById('nextStep').textContent = data.nextStep || 'Consult a local agricultural extension officer.';
+
+      const statusBadge = document.getElementById('statusBadge');
+      const isHealthy = data.label && data.label.toLowerCase().includes('healthy');
+      const isNotPlant = data.confidence === 0 || (data.label && data.label.toLowerCase().includes('not a plant'));
+
+      if (isHealthy) {
+        statusBadge.className = 'status ok';
+        statusBadge.textContent = '✓ Healthy crop';
+      } else if (isNotPlant) {
+        statusBadge.className = 'status warn';
+        statusBadge.textContent = '⚠ Non-plant / Unrecognized';
+      } else {
+        statusBadge.className = 'status warn';
+        statusBadge.textContent = '⚠ Possible issue found';
+      }
+
+      analyzingCard.style.display = 'none';
+      resultCard.style.display = 'block';
+    } catch (err) {
+      console.error('Error analyzing crop photo:', err);
+      analyzingCard.style.display = 'none';
+      resultEmpty.style.display = 'block';
+      showError(err.message || 'Unable to analyze photo. Please verify that the backend server is running.');
+    } finally {
+      analyzeBtn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>

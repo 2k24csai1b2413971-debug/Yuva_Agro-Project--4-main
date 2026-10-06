@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fertilizer Calculator — Yuva Agro</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">
+      <span class="yuva">Yuva</span><span class="agro">Agro</span>
+      <span class="mark">युवा एग्रो</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="water-calculator.html">Water Calculator</a>
+      <a href="fertilizer-calculator.html" class="active">Fertilizer Calculator</a>
+      <a href="disease-detection.html">Disease Detection</a>
+      <a href="chatbot.html">AI Chatbot</a>
+      <div class="lang-toggle">
+        <button class="on">EN</button>
+        <button>हिं</button>
+      </div>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div class="furrow"></div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Nutrients</p>
+      <h2>Fertilizer Calculator</h2>
+      <p>Get a Nitrogen–Phosphorus–Potassium (N-P-K) recommendation for your crop, land size and soil.</p>
+    </div>
+
+    <div class="calc-shell">
+      <!-- FORM -->
+      <form id="fertForm">
+        <div class="field">
+          <label for="crop">Crop</label>
+          <select id="crop" required>
+            <option value="">Select crop</option>
+            <option value="rice" data-n="120" data-p="60" data-k="40">Rice / Paddy</option>
+            <option value="wheat" data-n="120" data-p="60" data-k="40">Wheat</option>
+            <option value="sugarcane" data-n="280" data-p="90" data-k="90">Sugarcane</option>
+            <option value="cotton" data-n="150" data-p="60" data-k="60">Cotton</option>
+            <option value="maize" data-n="150" data-p="75" data-k="60">Maize</option>
+            <option value="groundnut" data-n="25" data-p="50" data-k="75">Groundnut</option>
+            <option value="soybean" data-n="30" data-p="60" data-k="40">Soybean</option>
+            <option value="tomato" data-n="150" data-p="100" data-k="100">Tomato</option>
+            <option value="onion" data-n="100" data-p="50" data-k="50">Onion</option>
+            <option value="chickpea" data-n="20" data-p="60" data-k="20">Chickpea / Chana</option>
+            <option value="mustard" data-n="80" data-p="40" data-k="40">Mustard</option>
+            <option value="potato" data-n="180" data-p="80" data-k="100">Potato</option>
+          </select>
+          <span class="hint">Recommended kg/hectare, ICAR general guidelines</span>
+        </div>
+
+        <div class="field">
+          <label for="area">Land area</label>
+          <input type="number" id="area" min="0.1" step="0.1" placeholder="e.g. 2" required>
+          <span class="hint">In acres</span>
+        </div>
+
+        <div class="field">
+          <label for="soil">Soil fertility</label>
+          <select id="soil" required>
+            <option value="">Select soil fertility</option>
+            <option value="low" data-factor="1.2">Low — poor previous yield, no recent fertilizer</option>
+            <option value="medium" data-factor="1.0">Medium — average, some fertilizer history</option>
+            <option value="high" data-factor="0.75">High — rich soil, recently fertilized or manured</option>
+          </select>
+          <span class="hint">Not sure? Choose "Medium" as a safe default.</span>
+        </div>
+
+        <div class="field">
+          <label for="organic">Using organic manure already?</label>
+          <div class="chip-group" id="organicChips">
+            <button type="button" class="chip selected" data-factor="1.0">No</button>
+            <button type="button" class="chip" data-factor="0.85">Yes, some</button>
+            <button type="button" class="chip" data-factor="0.65">Yes, heavily</button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Calculate Fertilizer Need</button>
+      </form>
+
+      <!-- RESULT -->
+      <div class="result-panel">
+        <div id="resultEmpty" class="result-empty">
+          <span class="icon">🌾</span>
+          Fill in the form to see your N-P-K recommendation here.
+        </div>
+
+        <div id="resultCard" class="seed-card" style="display:none;">
+          <div class="stamp">NPK<br>CALC</div>
+          <span class="tag" id="resultCropTag">CROP</span>
+          <h3>Recommended Dosage</h3>
+          <p style="margin-bottom:6px;">For your full plot area</p>
+
+          <div class="ledger" style="border:none; background:transparent;">
+            <div class="ledger-row" style="padding-left:0; padding-right:0;">
+              <span class="label">Nitrogen (N)</span>
+              <span class="value" id="nValue">— kg</span>
+            </div>
+            <div class="ledger-row" style="padding-left:0; padding-right:0;">
+              <span class="label">Phosphorus (P)</span>
+              <span class="value" id="pValue">— kg</span>
+            </div>
+            <div class="ledger-row" style="padding-left:0; padding-right:0;">
+              <span class="label">Potassium (K)</span>
+              <span class="value" id="kValue">— kg</span>
+            </div>
+          </div>
+
+          <div class="divider-dash"></div>
+          <p style="font-size:0.82rem;">Split Nitrogen into 2–3 doses across the growing season instead of applying it all at once — this reduces loss and improves uptake.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <div class="foot-brand">Yuva Agro</div>
+      <p style="max-width:32ch; font-size:0.88rem;">Data-backed farming tools for Indian growers.</p>
+    </div>
+    <div class="foot-cols">
+      <div>
+        <h5>Tools</h5>
+        <ul>
+          <li><a href="water-calculator.html">Water Calculator</a></li>
+          <li><a href="fertilizer-calculator.html">Fertilizer Calculator</a></li>
+          <li><a href="disease-detection.html">Disease Detection</a></li>
+          <li><a href="chatbot.html">AI Chatbot</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">© 2026 Yuva Agro. Built for the field.</div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  const organicChips = document.querySelectorAll('#organicChips .chip');
+  organicChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      organicChips.forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+  });
+
+  const form = document.getElementById('fertForm');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const cropSelect = document.getElementById('crop');
+    const cropOpt = cropSelect.options[cropSelect.selectedIndex];
+    const cropName = cropOpt.text;
+    const nBase = parseFloat(cropOpt.dataset.n); // kg/hectare
+    const pBase = parseFloat(cropOpt.dataset.p);
+    const kBase = parseFloat(cropOpt.dataset.k);
+
+    const areaAcres = parseFloat(document.getElementById('area').value);
+    const areaHectares = areaAcres * 0.404686; // 1 acre = 0.404686 hectare
+
+    const soilSelect = document.getElementById('soil');
+    const soilFactor = parseFloat(soilSelect.options[soilSelect.selectedIndex].dataset.factor);
+
+    const organicFactor = parseFloat(document.querySelector('#organicChips .chip.selected').dataset.factor);
+
+    const totalFactor = soilFactor * organicFactor;
+
+    const nTotal = nBase * areaHectares * totalFactor;
+    const pTotal = pBase * areaHectares * totalFactor;
+    const kTotal = kBase * areaHectares * totalFactor;
+
+    document.getElementById('resultCropTag').textContent = cropName.toUpperCase();
+    document.getElementById('nValue').textContent = Math.round(nTotal).toLocaleString('en-IN') + ' kg';
+    document.getElementById('pValue').textContent = Math.round(pTotal).toLocaleString('en-IN') + ' kg';
+    document.getElementById('kValue').textContent = Math.round(kTotal).toLocaleString('en-IN') + ' kg';
+
+    document.getElementById('resultEmpty').style.display = 'none';
+    document.getElementById('resultCard').style.display = 'block';
+    document.getElementById('resultCard').scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Farmer Chatbot — Yuva Agro</title>
+<meta name="description" content="Kisan Mitra: AI-powered agricultural advisor for Indian farmers with English and Hindi regional language support.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo">
+      <span class="yuva">Yuva</span><span class="agro">Agro</span>
+      <span class="mark">युवा एग्रो</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="water-calculator.html">Water Calculator</a>
+      <a href="fertilizer-calculator.html">Fertilizer Calculator</a>
+      <a href="disease-detection.html">Disease Detection</a>
+      <a href="chatbot.html" class="active">AI Chatbot</a>
+      <div class="lang-toggle" id="langToggle">
+        <button id="langEnBtn" class="on" type="button">EN</button>
+        <button id="langHiBtn" type="button">हिं</button>
+      </div>
+    </nav>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </div>
+</header>
+
+<div class="furrow"></div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow" id="pageEyebrow">AI Farm Advisory</p>
+      <h2 id="pageTitle">Kisan Mitra Chatbot</h2>
+      <p id="pageSubtitle">Ask practical questions about crops, irrigation schedules, fertilizer dosing, pest control, and government agricultural schemes.</p>
+    </div>
+
+    <div class="chat-shell">
+      <div class="chat-card">
+        <!-- Chat Header -->
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <div class="chat-avatar">🌾</div>
+            <div class="chat-header-title">
+              <h3 id="botName">Yuva Kisan Mitra</h3>
+              <p><span class="chat-online-dot"></span> <span id="botStatus">Online • Agro-Advisory AI</span></p>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <span class="chat-lang-indicator" id="currentLangBadge">Language: EN</span>
+            <button type="button" class="chat-clear-btn" id="clearChatBtn" title="Clear chat history">Clear Chat</button>
+          </div>
+        </div>
+
+        <!-- Chat Message Thread -->
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+          <!-- Welcome message rendered via JS -->
+        </div>
+
+        <!-- Quick Suggestion Chips -->
+        <div class="chat-quick-wrap">
+          <div class="chat-quick-label" id="quickPromptLabel">Quick questions</div>
+          <div class="chat-suggestions" id="chatSuggestions">
+            <!-- Populated dynamically based on language -->
+          </div>
+        </div>
+
+        <!-- Chat Input Form -->
+        <div class="chat-form-wrap">
+          <form class="chat-form" id="chatForm">
+            <input
+              type="text"
+              class="chat-input"
+              id="chatInput"
+              placeholder="Ask your farming question (e.g. wheat irrigation schedule)..."
+              maxlength="2000"
+              autocomplete="off"
+              required
+            >
+            <button type="submit" class="btn btn-primary chat-send-btn" id="sendBtn">
+              <span id="sendText">Send</span> ➔
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <div class="foot-brand">Yuva Agro</div>
+      <p style="max-width:32ch; font-size:0.88rem;">Data-backed farming tools for Indian growers.</p>
+    </div>
+    <div class="foot-cols">
+      <div>
+        <h5>Tools</h5>
+        <ul>
+          <li><a href="water-calculator.html">Water Calculator</a></li>
+          <li><a href="fertilizer-calculator.html">Fertilizer Calculator</a></li>
+          <li><a href="disease-detection.html">Disease Detection</a></li>
+          <li><a href="chatbot.html">AI Chatbot</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>About</h5>
+        <ul>
+          <li><a href="#">Our Mission</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">© 2026 Yuva Agro. Built for the field.</div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  // State variables
+  let currentLanguage = 'en'; // 'en' or 'hi'
+  let conversationHistory = []; // [{ role: 'user'|'model', content: '...' }]
+  let isAwaitingResponse = false;
+
+  const chatMessages = document.getElementById('chatMessages');
+  const chatForm = document.getElementById('chatForm');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+  const clearChatBtn = document.getElementById('clearChatBtn');
+  const chatSuggestions = document.getElementById('chatSuggestions');
+  const currentLangBadge = document.getElementById('currentLangBadge');
+
+  const langEnBtn = document.getElementById('langEnBtn');
+  const langHiBtn = document.getElementById('langHiBtn');
+
+  // Text bundles for localization
+  const i18n = {
+    en: {
+      eyebrow: "AI Farm Advisory",
+      title: "Kisan Mitra Chatbot",
+      subtitle: "Ask practical questions about crops, irrigation schedules, fertilizer dosing, pest control, and government agricultural schemes.",
+      badge: "Language: English",
+      clearBtn: "Clear Chat",
+      placeholder: "Ask your farming question (e.g., wheat fertilizer schedule)...",
+      send: "Send",
+      quickLabel: "Quick questions",
+      welcome: "Namaste! I am **Yuva Kisan Mitra**, your agricultural AI advisor. Ask me anything about crop planning, disease control, fertilizer dosing, or weather prep. How can I help your farm today?",
+      suggestions: [
+        "🌾 Wheat irrigation schedule",
+        "🐛 Tomato leaf curl disease control",
+        "🌱 Balanced NPK dosing for mustard",
+        "📋 How to apply for PM-KISAN?"
+      ]
+    },
+    hi: {
+      eyebrow: "एआई कृषि सलाहकार",
+      title: "किसान मित्र चैटबॉट",
+      subtitle: "फसलों, सिंचाई के समय, खाद की मात्रा, कीट प्रबंधन और सरकारी योजनाओं के बारे में सरल हिंदी में सलाह पाएं।",
+      badge: "भाषा: हिंदी",
+      clearBtn: "चैट साफ करें",
+      placeholder: "अपनी खेती से जुड़ा सवाल पूछें (जैसे: गेहूं में खाद का अनुपात)...",
+      send: "भेजें",
+      quickLabel: "सुझाए गए प्रश्न",
+      welcome: "नमस्ते किसान साथी! मैं **युवा किसान मित्र** हूँ। आप मुझसे फसलों की देखभाल, खाद-पानी के सही समय, कीट नियंत्रण या सरकारी योजनाओं के बारे में कोई भी सवाल पूछ सकते हैं। आज आपकी क्या सहायता करूँ?",
+      suggestions: [
+        "🌾 गेहूं में सिंचाई का सही समय",
+        "🐛 टमाटर में पत्ती मरोड़ रोग का उपचार",
+        "🌱 सरसों के लिए संतुलित खाद की मात्रा",
+        "📋 पीएम-किसान योजना के लिए आवेदन कैसे करें?"
+      ]
+    }
+  };
+
+  // Switch active language
+  function setLanguage(lang) {
+    currentLanguage = lang;
+
+    if (lang === 'hi') {
+      langHiBtn.classList.add('on');
+      langEnBtn.classList.remove('on');
+    } else {
+      langEnBtn.classList.add('on');
+      langHiBtn.classList.remove('on');
+    }
+
+    const bundle = i18n[lang];
+    document.getElementById('pageEyebrow').textContent = bundle.eyebrow;
+    document.getElementById('pageTitle').textContent = bundle.title;
+    document.getElementById('pageSubtitle').textContent = bundle.subtitle;
+    currentLangBadge.textContent = bundle.badge;
+    clearChatBtn.textContent = bundle.clearBtn;
+    chatInput.placeholder = bundle.placeholder;
+    document.getElementById('sendText').textContent = bundle.send;
+    document.getElementById('quickPromptLabel').textContent = bundle.quickLabel;
+
+    renderSuggestions();
+
+    // If chat is empty or just has welcome, refresh welcome message
+    if (conversationHistory.length === 0) {
+      chatMessages.innerHTML = '';
+      appendBotMessage(bundle.welcome);
+    }
+  }
+
+  // Render suggestion chips
+  function renderSuggestions() {
+    const list = i18n[currentLanguage].suggestions;
+    chatSuggestions.innerHTML = '';
+    list.forEach(text => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'suggestion-chip';
+      chip.textContent = text;
+      chip.addEventListener('click', () => {
+        chatInput.value = text.replace(/^[^\s]+\s/, ''); // strip emoji
+        chatForm.dispatchEvent(new Event('submit'));
+      });
+      chatSuggestions.appendChild(chip);
+    });
+  }
+
+  // Formatting helper: converts markdown bold & line breaks safely
+  function formatMessageText(text) {
+    if (!text) return '';
+    // Escape HTML first to prevent XSS
+    const div = document.createElement('div');
+    div.textContent = text;
+    let safe = div.innerHTML;
+
+    // Convert markdown bold **text**
+    safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // Convert bullet lists (lines starting with * or -)
+    const lines = safe.split('\n');
+    let inList = false;
+    let html = '';
+
+    lines.forEach(line => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('* ') || trimmed.startsWith('- ')) {
+        if (!inList) {
+          html += '<ul>';
+          inList = true;
+        }
+        html += `<li>${trimmed.substring(2)}</li>`;
+      } else {
+        if (inList) {
+          html += '</ul>';
+          inList = false;
+        }
+        if (trimmed.length > 0) {
+          html += `<p>${trimmed}</p>`;
+        }
+      }
+    });
+
+    if (inList) html += '</ul>';
+    return html;
+  }
+
+  // Current timestamp string
+  function getTimeString() {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  // Append user message bubble
+  function appendUserMessage(text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg user';
+    msgDiv.innerHTML = `
+      <div class="chat-bubble">
+        <p>${escapeHtml(text)}</p>
+        <div class="chat-time">${getTimeString()}</div>
+      </div>
+    `;
+    chatMessages.appendChild(msgDiv);
+    scrollToBottom();
+  }
+
+  // Append bot message bubble
+  function appendBotMessage(text) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg bot';
+    msgDiv.innerHTML = `
+      <div class="chat-bubble">
+        ${formatMessageText(text)}
+        <div class="chat-time">${getTimeString()}</div>
+      </div>
+    `;
+    chatMessages.appendChild(msgDiv);
+    scrollToBottom();
+  }
+
+  // Show typing animation
+  function showTypingIndicator() {
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'typingIndicator';
+    typingDiv.className = 'chat-msg bot';
+    typingDiv.innerHTML = `
+      <div class="chat-typing" aria-label="Kisan Mitra is typing">
+        <span></span><span></span><span></span>
+      </div>
+    `;
+    chatMessages.appendChild(typingDiv);
+    scrollToBottom();
+  }
+
+  // Remove typing animation
+  function removeTypingIndicator() {
+    const el = document.getElementById('typingIndicator');
+    if (el) el.remove();
+  }
+
+  function scrollToBottom() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  // Language button event listeners
+  langEnBtn.addEventListener('click', () => setLanguage('en'));
+  langHiBtn.addEventListener('click', () => setLanguage('hi'));
+
+  // Clear chat button
+  clearChatBtn.addEventListener('click', () => {
+    conversationHistory = [];
+    chatMessages.innerHTML = '';
+    appendBotMessage(i18n[currentLanguage].welcome);
+  });
+
+  // Handle Form Submit
+  chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (isAwaitingResponse) return;
+
+    const userText = chatInput.value.trim();
+    if (!userText) return;
+
+    if (userText.length > 2000) {
+      alert('Your message is too long (maximum 2,000 characters). Please shorten it.');
+      return;
+    }
+
+    // Append to UI and local history
+    appendUserMessage(userText);
+    chatInput.value = '';
+
+    isAwaitingResponse = true;
+    chatInput.disabled = true;
+    sendBtn.disabled = true;
+    showTypingIndicator();
+
+    try {
+      const payload = {
+        message: userText,
+        language: currentLanguage,
+        history: conversationHistory
+      };
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      removeTypingIndicator();
+
+      if (!response.ok) {
+        throw new Error(data.error || `Server responded with status ${response.status}`);
+      }
+
+      const botReply = data.reply || (currentLanguage === 'hi'
+        ? 'माफ़ कीजिए, उत्तर प्राप्त करने में समस्या हुई।'
+        : 'Sorry, I could not process your request.');
+
+      appendBotMessage(botReply);
+
+      // Save to conversation history
+      conversationHistory.push({ role: 'user', content: userText });
+      conversationHistory.push({ role: 'model', content: botReply });
+
+      // Cap local history to last 10 messages
+      if (conversationHistory.length > 10) {
+        conversationHistory = conversationHistory.slice(-10);
+      }
+    } catch (err) {
+      removeTypingIndicator();
+      console.error('Chat error:', err);
+      const errMsg = currentLanguage === 'hi'
+        ? `⚠️ सर्वर से संपर्क नहीं हो सका: ${err.message}. कृपया सुनिश्चित करें कि बैकएंड सर्वर चल रहा है।`
+        : `⚠️ Unable to connect to server: ${err.message}. Please verify the backend server is running.`;
+      appendBotMessage(errMsg);
+    } finally {
+      isAwaitingResponse = false;
+      chatInput.disabled = false;
+      sendBtn.disabled = false;
+      chatInput.focus();
+    }
+  });
+
+  // Initialize
+  setLanguage('en');
+</script>
+
+</body>
+</html>
