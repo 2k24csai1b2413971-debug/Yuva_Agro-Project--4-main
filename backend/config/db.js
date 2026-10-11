@@ -24,4 +24,4 @@ const connectDB = async () => {
 
 connectDB.isConnected = () => connected && mongoose.connection.readyState === 1;
 
-module.exports = connectDB;
+module.exports = connectDB();
