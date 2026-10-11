@@ -42,8 +42,17 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-connectDB();
+async function startServer() {
+  try {
+    await connectDB();
+    console.log('MongoDB connected successfully');
+  } catch (error) {
+    console.error('MongoDB connection failed:', error.message);
+  }
 
-app.listen(PORT, () => {
-  console.log(`\n   Yuva Agro running at http://localhost:${PORT}\n`);
-});
+  app.listen(PORT, () => {
+    console.log(`Yuva Agro running on port ${PORT}`);
+  });
+}
+
+startServer();
