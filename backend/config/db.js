@@ -1,27 +1,35 @@
 const mongoose = require('mongoose');
 
-let connected = false;
+let connectionPromise = null;
 
-const connectDB = async () => {
-  const uri = process.env.MONGODB_URI;
+async function connectDB() {
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
 
   if (!uri) {
-    console.warn('MONGO_URI is not set in backend/.env — farmer features will be unavailable.');
-    return;
+    throw new Error('MongoDB connection string is missing');
   }
 
-  try {
-    await mongoose.connect(uri);
-    connected = true;
-    console.log('MongoDB connected successfully');
-  } catch (error) {
-    // Deliberately NOT exiting the process. If MongoDB is unavailable we still
-    // want the chatbot and disease detection to work.
-    console.error('MongoDB connection failed:', error.message);
-    console.error('Farmer registration will not work until MongoDB is running.');
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
   }
-};
 
-connectDB.isConnected = () => connected && mongoose.connection.readyState === 1;
+  if (!connectionPromise) {
+    connectionPromise = mongoose.connect(uri)
+      .then(() => {
+        console.log('MongoDB connected successfully');
+        return mongoose.connection;
+      })
+      .catch((error) => {
+        connectionPromise = null;
+        console.error('MongoDB connection failed:', error.message);
+        throw error;
+      });
+  }
+
+  return connectionPromise;
+}
+
+connectDB.isConnected = () =>
+  mongoose.connection.readyState === 1;
 
 module.exports = connectDB;
