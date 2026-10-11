@@ -40,10 +40,15 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(FRONTEND_DIR, 'index.html'));
 });
 
-const PORT = process.env.PORT || 5000;
-
 connectDB();
 
-app.listen(PORT, () => {
-  console.log(`\n  Yuva Agro running at http://localhost:${PORT}\n`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`\n   Yuva Agro running at http://localhost:${PORT}\n`);
+  });
+}
+
+// Export the app for Vercel Serverless Functions
+module.exports = app;
