@@ -42,8 +42,25 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-connectDB();
-
-app.listen(PORT, () => {
-  console.log(`\n   Yuva Agro running at http://localhost:${PORT}\n`);
+// Ensure MongoDB is connected before handling API requests.
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Database connection error:', error.message);
+    res.status(503).json({
+      message: 'Database connection failed'
+    });
+  }
 });
+
+// Export the Express app for Vercel.
+module.exports = app;
+
+// Start a local server only when running directly.
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(Yuva Agro running on port ${PORT});
+  });
+}
