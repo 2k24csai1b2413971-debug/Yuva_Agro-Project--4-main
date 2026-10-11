@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 let connected = false;
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri = process.env.MONGODB_URI;
 
   if (!uri) {
     console.warn('MONGO_URI is not set in backend/.env — farmer features will be unavailable.');
